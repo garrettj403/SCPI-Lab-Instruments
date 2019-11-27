@@ -5,6 +5,10 @@ Note:
     Keysight has an excellent resource for communicating with instruments over
     SCPI: 'System Power Supply Programming: Using SCPI Commands'.
 
+    Hittite SCPI commands can be found here:
+
+        https://www.analog.com/media/en/technical-documentation/user-guides/hmc-t2200_family_programmers_guide_131547.pdf
+
 """
 
 import os
@@ -16,6 +20,11 @@ import time
 class Hittite:
     """Control a Hittite signal generator.
 
+    Note:
+
+        This has only been tested with a HMC-T2240 signal generator. Some of
+        the commands may differ for other models.
+
     Args:
         ip_address (string): IP address of the Hittite signal generator, e.g.,
             ``ip_address='192.168.0.159'``
@@ -23,6 +32,15 @@ class Hittite:
             communication on the Hittite signal generator
 
     """
+
+    # TODO: Add power sweep ability
+    # TODO: Add frequency sweep
+    #     Start Continuous Sweep:
+    #     freq:star 1e9;stop 2e9;step 100e6;mode swe
+    #     swe:dwel 0.1
+    #     init:cont on
+    #     <let sweep run>
+    #     init:cont off
 
     def __init__(self, ip_address, port=5025):
 
@@ -47,7 +65,13 @@ class Hittite:
         """Close connection to instrument."""
 
         self._skt.close()
-        
+
+    def get_id(self):
+        """Get identity of signal generator."""
+
+        self._send('IDN?')
+        return self._receive()
+
     def set_frequency(self, freq, units='GHz'):
         """Set frequency.
 
@@ -74,7 +98,7 @@ class Hittite:
 
         msg = 'FREQ?'
         self._send(msg)
-        frequency = self._receive()
+        frequency = float(self._receive())
 
         return freq / _frequency_units(units)
 
@@ -86,6 +110,8 @@ class Hittite:
             units (string, optional, default is 'dBm'): units for power
 
         """
+
+        assert units.lower() == 'dbm', "Only dBm supported."
 
         msg = 'POW {} {}'.format(float(power), units)
         self._send(msg)
@@ -100,7 +126,7 @@ class Hittite:
 
         msg = 'POW?'
         self._send(msg)
-        power = self._receive()
+        power = float(self._receive())
 
         return power
 
@@ -199,6 +225,8 @@ class SignalGenerator(Hittite):
         self.power_on()
 
 
+# Helper functions -----------------------------------------------------------
+
 def _frequency_units(units):
     """Get frequency multiplier."""
     freq_units = {'ghz': 1e9, 'mhz': 1e6, 'khz': 1e3, 'hz': 1}
@@ -209,6 +237,8 @@ def _frequency_units(units):
         raise e
     return units
 
+
+# Main -----------------------------------------------------------------------
 
 if __name__ == "__main__":
 
