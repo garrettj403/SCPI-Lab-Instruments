@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name = "LabInstruments",
+    name = "SCPI Lab Instruments",
     version = "0.0.1",
     author = "John Garrett",
     author_email = "garrettj403@gmail.com",

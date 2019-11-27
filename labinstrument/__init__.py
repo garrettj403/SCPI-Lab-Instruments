@@ -1,2 +1,2 @@
 
-from hittite import Hittite, SignalGenerator
+from labinstrument.hittite import Hittite, SignalGenerator
