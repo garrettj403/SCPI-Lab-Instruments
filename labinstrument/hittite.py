@@ -55,10 +55,10 @@ class Hittite:
         try:
             self._skt.connect((ip_address, port))
         except socket.gaierror as e:
-            print('Address-related error connecting to instrument: %s' % s)
+            print('Address-related error connecting to instrument: %s' % e)
             sys.exit(1)
         except socket.error as e:
-            print('Error connecting to socket on instrument: %s' % s)
+            print('Error connecting to socket on instrument: %s' % e)
             sys.exit(1)
 
     def close(self):
@@ -69,7 +69,7 @@ class Hittite:
     def get_id(self):
         """Get identity of signal generator."""
 
-        self._send('IDN?')
+        self._send('*IDN?')
         return self._receive()
 
     def set_frequency(self, freq, units='GHz'):
@@ -98,7 +98,7 @@ class Hittite:
 
         msg = 'FREQ?'
         self._send(msg)
-        frequency = float(self._receive())
+        freq = float(self._receive())
 
         return freq / _frequency_units(units)
 
@@ -246,3 +246,4 @@ if __name__ == "__main__":
     sg.set_frequency(5, 'GHz')
     sg.set_power(-38, 'dBm')
     sg.power_off()
+
