@@ -43,6 +43,11 @@ class Hittite:
             print('Error connecting to socket on instrument: %s' % s)
             sys.exit(1)
 
+    def close(self):
+        """Close connection to instrument."""
+
+        self._skt.close()
+        
     def set_frequency(self, freq, units='GHz'):
         """Set frequency.
 
