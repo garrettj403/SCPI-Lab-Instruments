@@ -52,6 +52,7 @@ class Keithley2280:
 
         msg = ':VOLT {}'.format(float(voltage))
         self._inst.write(msg)
+        _ = get_voltage()
 
     def set_voltage_limit(self, voltage):
         """Set voltage limit.
@@ -63,6 +64,7 @@ class Keithley2280:
 
         msg = ':VOLT:LIM {}'.format(float(voltage))
         self._inst.write(msg)
+        _ = get_voltage()
 
     def get_voltage(self):
         """Get voltage.
@@ -85,6 +87,7 @@ class Keithley2280:
 
         msg = ':CURR {}'.format(float(current))
         self._inst.write(msg)
+        _ = get_current()
 
     def set_current_limit(self, current):
         """Set current limit.
@@ -96,6 +99,7 @@ class Keithley2280:
 
         msg = ':CURR:LIM {}'.format(float(current))
         self._inst.write(msg)
+        _ = get_current()
 
     def get_current(self):
         """Get current.
@@ -111,7 +115,7 @@ class Keithley2280:
     def power_off(self):
         """Turn off output power."""
 
-        msg = ':OUTP ON'
+        msg = ':OUTP OFF'
         self._inst.write(msg)
 
     def output_off(self):
@@ -122,7 +126,7 @@ class Keithley2280:
     def power_on(self):
         """Turn on output power."""
 
-        msg = ':OUTP OFF'
+        msg = ':OUTP ON'
         self._inst.write(msg)
 
     def output_on(self):
