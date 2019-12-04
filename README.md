@@ -33,7 +33,8 @@ sg.power_on()
 # Connect to Keithley power supply
 ps = Keithley2280('192.168.0.117')
 ps.reset()
+ps.output_on()
+ps.set_voltage_limit(12)
 ps.set_voltage(2)
 ps.set_current(0.1)
-ps.output_on()
 ```

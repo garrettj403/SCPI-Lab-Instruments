@@ -155,9 +155,7 @@ if __name__ == "__main__":
     ps.reset()
     print(ps.get_id())
 
-    ps.set_voltage(2)
-    ps.set_current(0.1)
     ps.output_on()
-
-
-
+    ps.set_voltage_limit(12)
+    ps.set_current(0.1)
+    ps.set_voltage(10)
