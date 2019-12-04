@@ -25,7 +25,7 @@ class Keithley2280:
 
     def __init__(self, ip_address):
 
-        self._inst = vxi11._instrument(ip_address)
+        self._inst = vxi11.Instrument(ip_address)
 
     def close(self):
         """Close connection to instrument."""
