@@ -27,6 +27,12 @@ class Keithley2280:
 
         self._inst = vxi11.Instrument(ip_address)
 
+        self.id = self.get_id()
+
+        # Ask if output is on
+        output = self._inst.ask(':OUTP?')
+        self.output = output == '1'
+
     def close(self):
         """Close connection to instrument."""
 
@@ -52,7 +58,8 @@ class Keithley2280:
 
         msg = ':VOLT {}'.format(float(voltage))
         self._inst.write(msg)
-        _ = self.get_voltage()
+        if self.output:
+            _ = self.get_voltage()
 
     def set_voltage_limit(self, voltage):
         """Set voltage limit.
@@ -64,7 +71,8 @@ class Keithley2280:
 
         msg = ':VOLT:LIM {}'.format(float(voltage))
         self._inst.write(msg)
-        _ = self.get_voltage()
+        if self.output:
+            _ = self.get_voltage()
 
     def get_voltage(self):
         """Get voltage.
@@ -87,7 +95,8 @@ class Keithley2280:
 
         msg = ':CURR {}'.format(float(current))
         self._inst.write(msg)
-        _ = self.get_current()
+        if self.output:
+            _ = self.get_current()
 
     def set_current_limit(self, current):
         """Set current limit.
@@ -99,7 +108,8 @@ class Keithley2280:
 
         msg = ':CURR:LIM {}'.format(float(current))
         self._inst.write(msg)
-        _ = self.get_current()
+        if self.output:
+            _ = self.get_current()
 
     def get_current(self):
         """Get current.
@@ -117,6 +127,7 @@ class Keithley2280:
 
         msg = ':OUTP OFF'
         self._inst.write(msg)
+        self.output = False
 
     def output_off(self):
         """Turn off output poewr."""
@@ -128,6 +139,7 @@ class Keithley2280:
 
         msg = ':OUTP ON'
         self._inst.write(msg)
+        self.output = True
 
     def output_on(self):
         """Turn on output power."""
