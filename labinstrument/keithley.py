@@ -25,22 +25,22 @@ class Keithley2280:
 
     def __init__(self, ip_address):
 
-        self.inst = vxi11.Instrument(ip_address)
+        self._inst = vxi11._instrument(ip_address)
 
     def close(self):
         """Close connection to instrument."""
 
-        self.inst.close()
+        self._inst.close()
 
     def get_id(self):
         """Get identity of signal generator."""
 
-        return self.inst.ask('*IDN?')
+        return self._inst.ask('*IDN?')
 
     def reset(self):
         """Reset instrument."""
 
-        self.inst.write("*RST")
+        self._inst.write("*RST")
 
     def set_voltage(self, voltage):
         """Set voltage.
@@ -51,7 +51,18 @@ class Keithley2280:
         """
 
         msg = ':VOLT {}'.format(float(voltage))
-        self.write(msg)
+        self._inst.write(msg)
+
+    def set_voltage_limit(self, voltage):
+        """Set voltage limit.
+
+        Args:
+            voltage (float): voltage limit in units 'V'
+
+        """
+
+        msg = ':VOLT:LIM {}'.format(float(voltage))
+        self._inst.write(msg)
 
     def get_voltage(self):
         """Get voltage.
@@ -61,8 +72,8 @@ class Keithley2280:
 
         """
 
-        self.inst.write(":FORM:ELEM \"READ\"")
-        return self.inst.ask(':MEAS:VOLT?')
+        self._inst.write(":FORM:ELEM \"READ\"")
+        return self._inst.ask(':MEAS:VOLT?')
 
     def set_current(self, current):
         """Set current.
@@ -73,7 +84,18 @@ class Keithley2280:
         """
 
         msg = ':CURR {}'.format(float(current))
-        self.write(msg)
+        self._inst.write(msg)
+
+    def set_current_limit(self, current):
+        """Set current limit.
+
+        Args:
+            current (float): current limit in units 'A'
+
+        """
+
+        msg = ':CURR:LIM {}'.format(float(current))
+        self._inst.write(msg)
 
     def get_current(self):
         """Get current.
@@ -83,14 +105,14 @@ class Keithley2280:
 
         """
 
-        self.inst.write(":FORM:ELEM \"READ\"")
-        return self.inst.ask(':MEAS:CURR?')
+        self._inst.write(":FORM:ELEM \"READ\"")
+        return self._inst.ask(':MEAS:CURR?')
 
     def power_off(self):
         """Turn off output power."""
 
         msg = ':OUTP ON'
-        self.write(msg)
+        self._inst.write(msg)
 
     def output_off(self):
         """Turn off output poewr."""
@@ -101,7 +123,7 @@ class Keithley2280:
         """Turn on output power."""
 
         msg = ':OUTP OFF'
-        self.write(msg)
+        self._inst.write(msg)
 
     def output_on(self):
         """Turn on output power."""
