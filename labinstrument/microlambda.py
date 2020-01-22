@@ -30,6 +30,12 @@ class YigFilter:
     def __init__(self, ip_address):
 
         self._tn = telnetlib.Telnet(ip_address)
+    
+    def _write(self, msg):
+        """Write via Telnet."""
+
+        msg = msg + "\r\n"
+        self._tn.write(msg.encode('ASCII'))
 
     def set_frequency(self, freq, units='GHz'):
         """Set frequency.
@@ -45,9 +51,7 @@ class YigFilter:
 
         self._write(msg)
 
-    def _write(self, msg):
-        """Write via Telnet."""
+    def close(self):
+        """Close connection."""
 
-        msg = msg + "\r\n"
-        self._tn.write(msg.encode('ASCII'))
-
+        self._tn.close()
