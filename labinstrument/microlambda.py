@@ -43,7 +43,7 @@ class YigFilter:
         freq = freq * FREQ_UNIT[units.lower()]
         msg = 'F{:.5f}'.format(float(freq))
 
-        self._send(msg)
+        self._write(msg)
 
     def _write(self, msg):
         """Write via Telnet."""
