@@ -48,5 +48,6 @@ class YigFilter:
     def _write(self, msg):
         """Write via Telnet."""
 
-        self._tn.write(msg + "\r\n".encode('ASCII'))
+        msg = msg + "\r\n"
+        self._tn.write(msg.encode('ASCII'))
 
